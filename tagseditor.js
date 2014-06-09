@@ -2,15 +2,24 @@
 
   $.fn.makeTagsEditor = function(userOptions) {
 
-    this.each(function() {
+    
 
-      var editor = new TagsEditor();
-    });
+    TagsEditor = function(id) {
 
-    TagsEditor = function() {
+      addTag = function(val){
+        alert(val)
+      };
+
+      importTags = function(vals){
+        var values = vals.split(options.delemiter)
+        if(values != undefined){
+          values.forEach(function(v){
+            addTag(v)
+          })
+        }
+      };
 
       var $self = this,
-        id = this.attr('id'),
         inputs = new Array(),
         options,
         data,
@@ -19,17 +28,31 @@
       defaultOptions = {
         width: '300px',
         height: '100px',
+        delemiter: ',',
       };
       options = $.extend(true, {}, defaultOptions, userOptions);
       data = {
         cursor: 0,
         tags: new Array(),
-        real_input:
+        pid: id,
+        real_input:'#' + id,
+        tag_wraper
       };
+      var value = $(data.real_input).val();
+      if(value != undefined){
+        importTags(value);
+      }
+
+      
+
+
 
     };
 
-
+this.each(function() {
+      var id = $(this).attr('id');
+      var editor = new TagsEditor(id);
+    });
   };
 
 })(jQuery);
