@@ -19,6 +19,15 @@ div.tagseditor span.tag{
   font-size:1.1em;
 }
 
+div.tagseditor span input{
+  width: 80px;
+  margin: 5px;
+  padding: 5px;
+  border:1px solid transparent;
+  color: #000;
+  background: transparent;
+}
+
 div.tagseditor span.data-selected{
   border:3px solid #a5a5a5;
   margin: 3px 3px;

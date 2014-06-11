@@ -29,9 +29,12 @@
         if (index != undefined) {
           data.cursor = index;
         }
-        var tagMark = '<span class="tag"><input id="' + id + '-input" data-default="'
+        if(val == undefined){
+          val = '';
+        }
+        var tagMark = '<span ><input id="' + id + '-input" data-default="'
         +options.defaultText+'" value="' + val + '" /></span>';
-        $(tagMark).insertAfter()
+        $(tagMark).insertAfter($(data.tags_group)[data.cursor])
       };
 
       tagSelected = function(tag) {
@@ -58,8 +61,8 @@
       importTags = function(vals) {
         var values = vals.split(options.delemiter)
         if (values != undefined) {
-          values.forEach(function(v) {
-            addTag(v)
+          values.forEach(function(v, index) {
+            addTag(v, index)
           })
         }
       };
@@ -98,6 +101,7 @@
         if (value != undefined) {
           importTags(value);
         }
+        addFakeInput();
         $(data.tags_group).on('click', data, function(e) {
           var tag = $(this)
           tagSelected(tag);
