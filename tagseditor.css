@@ -16,9 +16,10 @@ div.tagseditor span.tag{
   margin: 5px 5px;
   padding: 5px;
   font-family: helvetica;  
-  font-size:13px;
+  font-size:1.1em;
 }
 
 div.tagseditor span.data-selected{
   border:3px solid #a5a5a5;
+  margin: 3px 3px;
 }

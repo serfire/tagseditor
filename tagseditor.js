@@ -9,7 +9,7 @@
       interfaceMarkup = function(id, settings) {
         var markup = '<div id="' + id + '-tags-editor" class="tagseditor"><div id="' + id + '-addTag">';
         if (settings.interactive) {
-          markup = markup + '<input id="' + id + '-tag" value="" data-default="' + settings.defaultText + '" />';
+          markup = markup + '<input id="' + id + '-input" value="" data-default="' + settings.defaultText + '" />';
         }
         markup = markup + '</div><div class="tags-clear"></div></div>';
         return markup;
@@ -25,16 +25,25 @@
         data.tags.splice(data.cursor, 0, val);
       };
 
+      addFakeInput = function(val, index){
+        if (index != undefined) {
+          data.cursor = index;
+        }
+        var tagMark = '<span class="tag"><input id="' + id + '-input" data-default="'
+        +options.defaultText+'" value="' + val + '" /></span>';
+        $(tagMark).insertAfter()
+      };
+
       tagSelected = function(tag) {
-        var selected = tag.attr('data-selected') || false;
+        var selected = tag.attr('data-selected');
         $(data.tags_group).each(function(index, elem) {
           if ($(this).is(tag)) {
             data.cursor = index;
-            if (selected == undefined || selected == false) {
+            if (selected == undefined ) {
               $(this).attr('data-selected', true);
               $(this).addClass('data-selected');
             } else {
-              $(this).attr('data-selected', false);
+              $(this).removeAttr('data-selected');
               $(this).removeClass('data-selected');
 
             }
@@ -68,6 +77,7 @@
         width: '300px',
         height: '100px',
         delemiter: ',',
+        defaultText: 'input tag',
       };
       options = $.extend(true, {}, defaultOptions, userOptions);
       data = {
@@ -78,7 +88,7 @@
         tags_group_wrapper: '#' + id + '-tags-editor',
         tags_group: '#' + id + '-tags-editor' + '>.tag',
         input_wrapper: '#' + id + '-addTag',
-        fake_input: '#' + id + '-tag',
+        fake_input: '#' + id + '-input',
       };
 
 
