@@ -15,34 +15,44 @@
         return markup;
       };
 
-      addTag = function(val, index) {
-        if (index != undefined) {
-          data.cursor = index;
-        }
-        var tagMark = '<span class="tag">' + val + '</span>';
-        $(data.tags_group_wrapper).prepend($(tagMark));
+      addTag = function(val, after) {
 
-        data.tags.splice(data.cursor, 0, val);
+        var tagMark = '<span class="tag">' + val + '</span>';
+        if (data.tags.length == 0) {
+          $(data.tags_group_wrapper).prepend($(tagMark));
+        } else {
+          if (after == undefined) {
+            after = $(data.cursor);
+          }
+          $(tagMark).insertAfter(after);
+        }
+        // data.tags.splice(data.cursor, 0, val);
       };
 
-      addFakeInput = function(val, index){
+      addFakeInput = function(val, after) {
         if (index != undefined) {
           data.cursor = index;
         }
-        if(val == undefined){
+        if (val == undefined) {
           val = '';
         }
-        var tagMark = '<span ><input id="' + id + '-input" data-default="'
-        +options.defaultText+'" value="' + val + '" /></span>';
+        var tagMark = '<span ><input id="' + id + '-input" data-default="' + options.defaultText + '" value="' + val + '" /></span>';
         $(tagMark).insertAfter($(data.tags_group)[data.cursor])
+        $(data.fake_input).on('keypress', function(e) {
+          if (String.fromCharCode(e.which) == (options.delemiter)) {
+            e.preventDefault();
+            addTag($(data.fake_input).val().trim());
+            $(data.fake_input).val('');
+          }
+        });
       };
 
       tagSelected = function(tag) {
         var selected = tag.attr('data-selected');
         $(data.tags_group).each(function(index, elem) {
           if ($(this).is(tag)) {
-            data.cursor = index;
-            if (selected == undefined ) {
+            data.cursor = $(this).attr('id');
+            if (selected == undefined) {
               $(this).attr('data-selected', true);
               $(this).addClass('data-selected');
             } else {
@@ -101,7 +111,9 @@
         if (value != undefined) {
           importTags(value);
         }
+        console.log(data.cursor);
         addFakeInput();
+
         $(data.tags_group).on('click', data, function(e) {
           var tag = $(this)
           tagSelected(tag);
