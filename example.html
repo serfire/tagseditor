@@ -7,12 +7,14 @@
   <script type="text/javascript" src="tagseditor.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#tags_1').makeTagsEditor();
+      $('#tags_1').makeTagsEditor({
+        delemiter: ' ',
+      });
     });
   </script>
 </head>
 <body>
   <p><label>Defaults:</label>
-      <input id="tags_1" type="text" class="tags" value="foo,bar,baz,roffle" /></p>
+      <input id="tags_1" type="text" class="tags" value="foo bar baz roffle" /></p>
 </body>
 </html>

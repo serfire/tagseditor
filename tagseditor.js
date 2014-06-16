@@ -7,44 +7,61 @@
     TagsEditor = function(self) {
 
       interfaceMarkup = function(id, settings) {
-        var markup = '<div id="' + id + '-tags-editor" class="tagseditor"><div id="' + id + '-addTag">';
+        var markup = '<div id="' + id + '-tags-editor" class="tagseditor"><div id="' + id + '-tags-wrapper"><span id="' + id + '-tags-header" /></div>';
         if (settings.interactive) {
           markup = markup + '<input id="' + id + '-input" value="" data-default="' + settings.defaultText + '" />';
         }
-        markup = markup + '</div><div class="tags-clear"></div></div>';
+        markup = markup + '<div class="tags-clear"></div></div>';
         return markup;
+      };
+
+      appendTag = function(val) {
+        addTag(val, $(data.tags_group_wrapper + ' > :last-child'));
+      };
+
+      addTagBefore = function(val, before) {
+        var tagMark = '<span class="tag">' + val + '</span>';
+        if (before == undefined) {
+          before = $(data.tag_header);
+        }
+        $(tagMark).insertBefore(before);
       };
 
       addTag = function(val, after) {
 
         var tagMark = '<span class="tag">' + val + '</span>';
-        if (data.tags.length == 0) {
-          $(data.tags_group_wrapper).prepend($(tagMark));
-        } else {
-          if (after == undefined) {
-            after = $(data.cursor);
-          }
-          $(tagMark).insertAfter(after);
+        if (after == undefined) {
+          after = $(data.tag_header);
         }
+        $(tagMark).insertAfter(after);
+        // if (data.tags.length == 0) {
+        //   $(data.tags_group_wrapper).prepend($(tagMark));
+        // } else {
+        //   if (after == undefined) {
+        //     after = $(data.cursor);
+        //   }
+        //   $(tagMark).insertAfter(after);
+        // }
         // data.tags.splice(data.cursor, 0, val);
       };
 
       addFakeInput = function(val, after) {
-        if (index != undefined) {
-          data.cursor = index;
+        if (after == undefined) {
+          after = $(data.tags_group_wrapper + ' > :last-child');
         }
         if (val == undefined) {
           val = '';
         }
-        var tagMark = '<span ><input id="' + id + '-input" data-default="' + options.defaultText + '" value="' + val + '" /></span>';
-        $(tagMark).insertAfter($(data.tags_group)[data.cursor])
+        var tagMark = '<span id="' + id + '-input"><input data-default="' + options.defaultText + '" value="' + val + '" /></span>';
+        $(tagMark).insertAfter(after)
         $(data.fake_input).on('keypress', function(e) {
           if (String.fromCharCode(e.which) == (options.delemiter)) {
             e.preventDefault();
-            addTag($(data.fake_input).val().trim());
+            addTagBefore($(data.fake_input).val().trim(), $(data.fake_input_wrapper));
             $(data.fake_input).val('');
           }
         });
+
       };
 
       tagSelected = function(tag) {
@@ -72,7 +89,7 @@
         var values = vals.split(options.delemiter)
         if (values != undefined) {
           values.forEach(function(v, index) {
-            addTag(v, index)
+            appendTag(v)
           })
         }
       };
@@ -98,10 +115,12 @@
         tags: new Array(),
         pid: id,
         real_input: '#' + id,
-        tags_group_wrapper: '#' + id + '-tags-editor',
-        tags_group: '#' + id + '-tags-editor' + '>.tag',
-        input_wrapper: '#' + id + '-addTag',
-        fake_input: '#' + id + '-input',
+        tags_group_wrapper: '#' + id + '-tags-wrapper',
+        tag_header: '#' + id + '-tags-header',
+        tags_group: '#' + id + '-tags-wrapper' + '>.tag',
+        // input_wrapper: '#' + id + '-addTag',
+        fake_input: '#' + id + '-input > input',
+        fake_input_wrapper: '#' + id + '-input',
       };
 
 
