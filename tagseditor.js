@@ -132,6 +132,9 @@
         $(data.editor).on('click', function(e) {
           $(data.fake_input).focus();
         });
+        $(data.fake_input).on('focus', function(e){
+          
+        });
         $(data.fake_input).on('keypress', function(e) {
           if (String.fromCharCode(e.which) == (options.delemiter)) {
             e.preventDefault();
