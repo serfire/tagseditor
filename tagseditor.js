@@ -47,6 +47,8 @@
         // data.tags.splice(data.cursor, 0, val);
       };
 
+
+
       addFakeInput = function(val, after) {
         if (after == undefined) {
           after = $(data.tags_group_wrapper + ' > :last-child');
@@ -60,24 +62,54 @@
 
       };
 
+      triggerTagSelect = function(tag) {
+        var selected = tag.attr('data-selected');
+        if (selected == undefined) {
+          selectTag(tag);
+        } else {
+          diselectTag(tag);
+        }
+      };
+
+      selectTag = function(tag) {
+        tag.attr('data-selected', true).addClass('data-selected');
+      };
+      diselectTag = function(tag) {
+        tag.each(function() {
+          $(this).removeAttr('data-selected').removeClass('data-selected');
+        });
+      };
+
+      diselectAllTag = function() {
+        diselectTag($(data.tags_group + '[data-selected="true"]'));
+      };
+
       tagSelected = function(tag) {
         var selected = tag.attr('data-selected');
-        $(data.tags_group).each(function(index, elem) {
-          if ($(this).is(tag)) {
-            data.cursor = $(this).attr('id');
-            if (selected == undefined) {
-              $(this).attr('data-selected', true);
-              $(this).addClass('data-selected');
-            } else {
-              $(this).removeAttr('data-selected');
-              $(this).removeClass('data-selected');
+        if (selected == undefined) {
+          diselectAllTag();
+          tag.attr('data-selected', true).addClass('data-selected');
+        } else {
+          tag.removeAttr('data-selected').removeClass('data-selected');
+        }
+        // tag.attr('data-selected', true).addClass('data-selected');
+        // var selected = tag.attr('data-selected');
+        // $(data.tags_group).each(function(index, elem) {
+        //   if ($(this).is(tag)) {
+        //     data.cursor = $(this).attr('id');
+        //     if (selected == undefined) {
+        //       $(this).attr('data-selected', true);
+        //       $(this).addClass('data-selected');
+        //     } else {
+        //       $(this).removeAttr('data-selected');
+        //       $(this).removeClass('data-selected');
 
-            }
-          } else {
-            $(this).removeClass('data-selected');
-            $(this).removeAttr('data-selected');
-          }
-        });
+        //     }
+        //   } else {
+        //     $(this).removeClass('data-selected');
+        //     $(this).removeAttr('data-selected');
+        //   }
+        // });
 
       };
 
@@ -132,8 +164,14 @@
         $(data.editor).on('click', function(e) {
           $(data.fake_input).focus();
         });
-        $(data.fake_input).on('focus', function(e){
-          
+        $(data.editor).on('keypress', function(e) {
+          switch (e.which) {
+            case 37:
+
+          }
+        });
+        $(data.fake_input).on('focus', function(e) {
+          diselectAllTag();
         });
         $(data.fake_input).on('keypress', function(e) {
           if (String.fromCharCode(e.which) == (options.delemiter)) {
